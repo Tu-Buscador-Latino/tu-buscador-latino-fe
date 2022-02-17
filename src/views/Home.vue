@@ -1,9 +1,10 @@
 <template>
+  
   <form 
     @submit.prevent="eventSearch"
     class="flex justify-center form-search mb-3"
   >
-    <div class="my-3 shadow-lg">
+    <div class="mt-3 mb-10 shadow-lg">
       <input
         class="lg:w-96 py-2 px-3 rounded-l-md font-roboto"
         maxlength="128"
@@ -20,28 +21,59 @@
     </div>
   </form>
   
+  <div v-if="showNotFoundMsg" class="flex justify-center">
+    <p>No se encontraron resultados</p>
+  </div>
+
+  <div>
+    <result-card
+      v-for="result in results"
+      :result="result"
+      :key="result.pageid"
+    />
+  </div>
+
 </template>
 
 <script>
+  const { convert } = require('html-to-text');
   import axios from "axios";
+  import ResultCard from "../components/ResultCard.vue";
 
   export default {
     name: 'Home',
     components: {
-      
+      ResultCard,
     },
     data() {
-      return{
-        eventQueries: {
-          toSearch: "",
-        },
-      }
+      return {
+        toSearch: "",
+        results: [],
+        showNotFoundMsg: false,
+      };
     },
     methods: {
-      eventSearch() {
-        console.log(this.toSearch);
-        let data = this.getDataFromWiki(this.toSearch)
-        console.log(data);
+      async eventSearch() {
+        if(!this.toSearch)
+          return;
+
+        let results = await this.getDataFromWiki(this.toSearch);
+        
+        // Validate results
+        if(!results || !results.length){
+          this.results = [];
+          this.showNotFoundMsg = true;
+          return;
+        }
+        this.showNotFoundMsg = false
+
+        // Convert snipped to plain text
+        this.results = results.map(function(obj){
+          obj.snippet = convert(obj.snippet, {
+            wordwrap: 130
+          });
+          return obj;
+        })
       },
       organizeWikiURL(search){
         let url = "https://en.wikipedia.org/w/api.php"; 
@@ -55,21 +87,18 @@
 
         url = url + "?origin=*";
         Object.keys(params).forEach(function(key){url += "&" + key + "=" + params[key];});
-        return url
+        return url;
       },
-      getDataFromWiki: async function(search) {
+      async getDataFromWiki(search) {
         try{
-          let result = await axios.get(this.organizeWikiURL(search))
+          let result = await axios.get(this.organizeWikiURL(search));
           if(result.status == 200)
-            return result.data['query']['search'] 
+            return result.data['query']['search']; 
         }
         catch (err){
           console.log(err);
         }
         return null
-
-
-
         // await axios
         //   .get(this.organizeWikiURL(search))
         //   .then((result) => {
@@ -80,5 +109,8 @@
         //   });
       },
     },
-  }
+    created() {
+
+    }
+  };
 </script>
