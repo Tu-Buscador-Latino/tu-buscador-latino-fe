@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center my-14">
     <h1 class="sm:text-8xl text-5xl font-bold text-blue-700">Tu Buscador</h1>
-    <p class="font-semibold text-blue-700 text-sm sm:text-xl">Latino</p>
+    <p class="font-semibold text-blue-500 text-sm sm:text-xl">Latino</p>
   </div>
 
   <form 
@@ -10,7 +10,8 @@
   >
     <div class="mt-3 mb-10 shadow-lg">
       <input
-        class="sm:w-96 py-2 px-3 rounded-l-md font-roboto"
+        class="sm:w-96 py-2 px-3 rounded-l-md font-roboto focus:outline-none 
+        focus:ring-blue-500 focus:ring-2"
         maxlength="128"
         placeholder="Ingrese su búsqueda"
         size="15"
@@ -18,7 +19,8 @@
         v-model="toSearch"
       />
       <button
-        class="btn bg-blue-700 font-roboto font-bold text-white py-2 px-3 rounded-r-md btn-primary"
+        class="btn bg-blue-700 font-roboto font-bold text-white py-2 
+        px-3 rounded-r-md btn-primary hover:bg-blue-900"
       >
         Buscar
       </button>
@@ -26,7 +28,7 @@
   </form>
   
   <div v-if="showNotFoundMsg" class="flex justify-center">
-    <p>No se encontraron resultados</p>
+    <p class="font-medium	">No se encontraron resultados</p>
   </div>
 
   <div>
@@ -87,7 +89,8 @@
             list: "search",
             srsearch: search,
             format: "json",
-            srprop: "snippet"
+            srprop: "snippet",
+            srlimit: "20"
         };
 
         url = url + "?origin=*";
