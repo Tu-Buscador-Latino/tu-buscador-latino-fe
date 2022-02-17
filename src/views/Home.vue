@@ -1,12 +1,16 @@
 <template>
-  
+  <div class="flex justify-center my-14">
+    <h1 class="sm:text-8xl text-5xl font-bold text-blue-700">Tu Buscador</h1>
+    <p class="font-semibold text-blue-700 text-sm sm:text-xl">Latino</p>
+  </div>
+
   <form 
     @submit.prevent="eventSearch"
     class="flex justify-center form-search mb-3"
   >
     <div class="mt-3 mb-10 shadow-lg">
       <input
-        class="lg:w-96 py-2 px-3 rounded-l-md font-roboto"
+        class="sm:w-96 py-2 px-3 rounded-l-md font-roboto"
         maxlength="128"
         placeholder="Ingrese su búsqueda"
         size="15"
@@ -82,7 +86,8 @@
             action: "query",
             list: "search",
             srsearch: search,
-            format: "json"
+            format: "json",
+            srprop: "snippet"
         };
 
         url = url + "?origin=*";
@@ -91,26 +96,15 @@
       },
       async getDataFromWiki(search) {
         try{
-          let result = await axios.get(this.organizeWikiURL(search));
-          if(result.status == 200)
-            return result.data['query']['search']; 
+          let response = await axios.get(this.organizeWikiURL(search));
+          if(response.status == 200)
+            return response.data['query']['search']; 
         }
         catch (err){
           console.log(err);
         }
         return null
-        // await axios
-        //   .get(this.organizeWikiURL(search))
-        //   .then((result) => {
-        //       console.log(result.data['query']['search']);
-        //   })
-        //   .catch(() => {
-        //     console.log("Error al buscar")
-        //   });
       },
-    },
-    created() {
-
     }
   };
 </script>
