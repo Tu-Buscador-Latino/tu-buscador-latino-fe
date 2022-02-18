@@ -45,6 +45,7 @@
   const { convert } = require('html-to-text');
   import axios from "axios";
   import ResultCard from "../components/ResultCard.vue";
+  const urlStatsPost = "http://127.0.0.1:8000/search/post/"
 
   export default {
     name: 'Home',
@@ -56,6 +57,7 @@
         toSearch: "",
         results: [],
         showNotFoundMsg: false,
+        totalhits: 0,
       };
     },
     methods: {
@@ -80,6 +82,9 @@
           });
           return obj;
         })
+
+        // Save stats
+        this.postSearchStats(this.toSearch, this.totalhits)
       },
       organizeWikiURL(search){
         let url = "https://en.wikipedia.org/w/api.php"; 
@@ -100,14 +105,33 @@
       async getDataFromWiki(search) {
         try{
           let response = await axios.get(this.organizeWikiURL(search));
-          if(response.status == 200)
+          if(response.status == 200){
+            this.totalhits = response.data['query']['searchinfo']['totalhits']; 
             return response.data['query']['search']; 
+          }
         }
         catch (err){
           console.log(err);
         }
         return null
       },
-    }
+      async postSearchStats(search, totalResults){
+        const searchData = {
+          word: search,
+          last_results: totalResults
+        }
+        axios
+          .post(urlStatsPost, searchData)
+          .then((result) => {
+              console.log(result.data);
+          })
+          .catch(() => {
+            console.log('Error saving stats');
+          });
+      },
+    },
+    created() {
+      this.$emit("toggleHome");
+    },
   };
 </script>
