@@ -4,7 +4,7 @@ Esta aplicación permite realizar consultas a wikipedia, ver las palabras mas bu
 
 ## 1. Descripción
 
-Este repositorio contiene la interfaz de usuario del aplicativo web **Tu Buscador Latino**. El frontend fue desarrollado con los framework Vue.js v3 y Tailwind CSS y consume la API de consulta de [**Wikipedia**](https://www.mediawiki.org/wiki/API:Search).
+Este repositorio contiene la interfaz de usuario del aplicativo web **Tu Buscador Latino**. El frontend fue desarrollado con los framework Vue.js v3 y Tailwind CSS y consume la API de consulta de [**Wikipedia**](https://www.mediawiki.org/wiki/API:Search). Consulte el backend [**aquí**](https://github.com/Tu-Buscador-Latino/tu-buscador-latino-be).
 
 ## 2. Tecnologías
 
