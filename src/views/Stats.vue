@@ -2,27 +2,12 @@
   <div class="flex justify-center mt-2 mb-10">
     <h1 class="font-roboto sm:text-7xl text-5xl font-bold text-blue-700">Lo más buscado</h1>
   </div>
-  <!-- <button
-    class="btn bg-blue-700 font-roboto font-bold text-white py-1 h-9
-    px-3 rounded-md btn-primary hover:bg-blue-900 m-1"
-    @click="getStats"
-  >
-    Ver
-  </button> -->
   <div class="w-screen xl:w-8/12 mt-20 mb-52 px-4 mx-auto">
     <div class="block w-full overflow-x-auto">
-      <!-- <button
-        class="btn bg-blue-700 font-roboto font-bold text-white py-1 h-9
-        px-3 rounded-md btn-primary hover:bg-blue-900 mb-10"
-        @click="getStats"
-      >
-        Ver
-      </button> -->
       <form 
         @submit.prevent="getStats"
         class="flex justify-center form-search mb-3"
       >
-        <!-- <label for="amount" class="mt-3">¿Cuantas palabras desea ver?</label> -->
         <div class="mt-3 mb-10">
           <label for="amount" class="mr-5 font-roboto font-medium text-lg text-blue-700">
             ¿Cuantas palabras desea ver?
