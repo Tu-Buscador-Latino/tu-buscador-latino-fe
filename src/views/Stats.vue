@@ -101,6 +101,15 @@
           </tr>
         </tbody>
       </table>
+      <div class="mt-5 mb-3 flex justify-center">
+        <button
+              class="btn bg-blue-700 font-roboto font-bold text-white py-2
+              px-3 rounded-md btn-primary hover:bg-blue-900"
+              @click="generatePdfReport"
+            >
+              Generar Reporte
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -108,6 +117,7 @@
 <script>
   import axios from "axios";
   import { DateTime } from "luxon";
+  import { jsPDF } from "jspdf";
   const urlStatsBase = "http://127.0.0.1:8000/search/stats/?max="
 
   export default {
@@ -141,6 +151,35 @@
             DateTime.DATETIME_SHORT
           );
         return date;
+      },
+      generatePdfReport(){
+        const doc = new jsPDF();
+
+        const headers = ["word", 
+                         "count", 
+                         "start_date", 
+                         "last_date", 
+                         "last_results"]
+
+        let rows = this.statsList.map(obj => {
+          return {
+            word: obj.word,
+            count: obj.count.toString(),
+            start_date: this.formatDate(obj.start_date),
+            last_date: this.formatDate(obj.last_date),
+            last_results: obj.last_results.toString()
+          };
+        })
+        const currentTime = DateTime.now().toLocaleString(
+                            DateTime.DATETIME_SHORT)
+        // Organize PDF
+        doc.setFontSize(20)
+        doc.text("Tu Buscador Latino", 60, 10)
+        doc.setFontSize(13)
+        doc.text("Las palabras mas buscadas", 10, 20)
+        doc.text("Hora: " + currentTime, 10, 30)
+        doc.table(10, 40, rows, headers)
+        doc.save("statsReport.pdf");
       },
     },
     created() {
